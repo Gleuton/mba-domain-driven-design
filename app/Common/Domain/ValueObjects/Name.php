@@ -8,7 +8,7 @@ class Name extends ValueObject
 {
     private string $name;
 
-    public function __construct(readonly string $value)
+    public function __construct(readonly ?string $value)
     {
         $value = trim($value);
         if ($value === '') {

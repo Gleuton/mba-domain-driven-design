@@ -22,7 +22,7 @@ class Partner extends AggregateRoot
     public static function create(array $command): self
     {
         if (empty($command['name'])) {
-            throw new DomainException('CPF e Nome são obrigatórios');
+            throw new DomainException('Nome é obrigatório');
         }
 
         return new self(
@@ -44,5 +44,12 @@ class Partner extends AggregateRoot
     public function changeName(Name $name): void
     {
         $this->name = $name;
+    }
+
+    protected function serializableFields(): array{
+        return [
+            'id' => $this->id->getValue(),
+            'name' => $this->name->getValue(),
+        ];
     }
 }
