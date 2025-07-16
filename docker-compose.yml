@@ -1,0 +1,43 @@
+services:
+  mba-ddd-nginx:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+      - ./.docker/nginx:/etc/nginx/conf.d
+    depends_on:
+      - mba-ddd-php
+    networks:
+      - mba-ddd-network
+
+  mba-ddd-php:
+    build: ./.docker
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mba-ddd-db
+    networks:
+      - mba-ddd-network
+
+  mba-ddd-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: fullcycle
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: developer
+    ports:
+      - "5432:5432"
+    volumes:
+      - mba-ddd-pgdata:/var/lib/postgresql/data
+    networks:
+      - mba-ddd-network
+
+networks:
+  mba-ddd-network:
+
+volumes:
+  mba-ddd-pgdata:
