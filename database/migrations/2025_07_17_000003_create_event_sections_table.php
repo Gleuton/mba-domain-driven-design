@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('event_sections', static function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->uuid('id')->primary();
             $table->string('name', 255);
             $table->text('description')->nullable();
             $table->boolean('is_published')->default(false);
             $table->integer('total_spots')->default(0);
             $table->integer('total_spots_reserved')->default(0);
             $table->decimal('price', 8, 2)->default(0);
-            $table->string('event_id');
+            $table->uuid('event_id');
             $table->timestamps();
 
             $table->foreign('event_id')

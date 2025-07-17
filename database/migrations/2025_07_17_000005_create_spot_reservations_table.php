@@ -8,9 +8,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('spot_reservations', static function (Blueprint $table) {
-            $table->string('spot_id')->primary();
+            $table->uuid('spot_id')->primary();
             $table->date('reservation_date');
-            $table->string('customer_id');
+            $table->uuid('customer_id');
             $table->timestamps();
 
             $table->foreign('spot_id')

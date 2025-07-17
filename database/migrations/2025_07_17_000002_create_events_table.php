@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', static function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->uuid('id')->primary();
             $table->string('name', 255);
             $table->text('description')->nullable();
             $table->date('date');
             $table->boolean('is_published')->default(false);
             $table->integer('total_spots')->default(0);
             $table->integer('total_spots_reserved')->default(0);
-            $table->string('partner_id'); // Foreign key para Partner
+            $table->uuid('partner_id');
             $table->timestamps();
 
             $table->foreign('partner_id')

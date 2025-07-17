@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customers', static function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->uuid('id')->primary();
             $table->string('cpf', 11)->unique();
             $table->string('name', 255);
             $table->timestamps();
