@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Infra\Mappers;
+namespace App\Events\Infra\Mapper;
 
 use App\Events\Domain\Entities\Partner\Partner;
 use App\Models\PartnerModel;

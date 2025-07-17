@@ -5,7 +5,7 @@ namespace Tests\Events\Infra\Repository;
 use App\Common\Domain\ValueObjects\Name;
 use App\Events\Domain\Entities\Partner\Partner;
 use App\Events\Domain\Entities\Partner\PartnerId;
-use App\Events\Infra\PartnerRepository;
+use App\Events\Infra\Repository\PartnerRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,8 +19,8 @@ class PartnerRepositoryTest extends TestCase
         $partner = Partner::create([
             'name' => 'Meu Parceiro 1'
         ]);
-       $repository = new PartnerRepository();
-       $repository->save($partner);
+        $repository = new PartnerRepository();
+        $repository->save($partner);
 
         $this->assertDatabaseHas('partners', [
             'id' => $partner->toArray()['id'],
@@ -42,7 +42,8 @@ class PartnerRepositoryTest extends TestCase
         $this->assertEquals($partner->toArray(), $foundPartner->toArray());
     }
 
-    public function testUpdatePartner(): void {
+    public function testChangeName(): void
+    {
         $partner = Partner::create([
             'name' => 'Meu Parceiro 3'
         ]);

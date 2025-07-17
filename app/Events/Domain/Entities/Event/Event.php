@@ -94,8 +94,6 @@ class Event extends AggregateRoot
         $this->date = $date;
     }
 
-
-
     protected function serializableFields(): array {
         return [
             'id' => $this->id->getValue(),

@@ -5,59 +5,16 @@ declare(strict_types=1);
 
 namespace App\Events\Domain\Entities\Event;
 
-use App\Events\Domain\Entities\EventSpot\EventSpot;
-use SplObjectStorage;
-use Traversable;
+use App\Common\Domain\AbstractCollection;
+use App\Common\Domain\AbstractEntity;
 
-class EventCollection implements \Countable, \IteratorAggregate
+use InvalidArgumentException;
+class EventCollection extends AbstractCollection
 {
-    private SplObjectStorage $event;
-
-    public function __construct()
+    public function validate(AbstractEntity $entity):void
     {
-        $this->event = new SplObjectStorage();
-    }
-
-    public function add(EventSpot $section): self
-    {
-        if (!$this->contains($section)) {
-            $this->event->attach($section);
+        if (!$entity instanceof Event) {
+            throw new InvalidArgumentException('The entity must be an instance of Event');
         }
-        return $this;
-    }
-
-    public function remove(EventSpot $section): self
-    {
-        $this->event->detach($section);
-        return $this;
-    }
-
-    public function contains(EventSpot $section): bool
-    {
-        return $this->event->contains($section);
-    }
-
-    public function clear(): void
-    {
-        $this->event = new SplObjectStorage();
-    }
-
-    public function toArray(): array
-    {
-        $formattedSpots = [];
-        foreach ($this->event as $spot) {
-            $formattedSpots[] = $spot->toArray();
-        }
-        return $formattedSpots;
-    }
-
-    public function count(): int
-    {
-        return $this->event->count();
-    }
-
-    public function getIterator(): Traversable
-    {
-        return $this->event;
     }
 }

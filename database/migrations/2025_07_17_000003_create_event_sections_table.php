@@ -15,7 +15,7 @@ return new class extends Migration
             $table->boolean('is_published')->default(false);
             $table->integer('total_spots')->default(0);
             $table->integer('total_spots_reserved')->default(0);
-            $table->decimal('price', 8, 2)->default(0);
+            $table->decimal('price')->default(0);
             $table->uuid('event_id');
             $table->timestamps();
 

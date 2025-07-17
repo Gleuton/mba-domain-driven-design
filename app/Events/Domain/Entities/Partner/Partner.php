@@ -38,7 +38,7 @@ class Partner extends AggregateRoot
             'name' => $name->getValue(),
             'description' => $description,
             'date' => $date->format('Y-m-d H:i:s'),
-            'partner_id' => $this->id->getValue(),
+            'partnerId' => $this->id->getValue(),
         ]);
     }
 

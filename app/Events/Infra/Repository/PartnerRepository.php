@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Events\Infra;
-
+namespace App\Events\Infra\Repository;
 
 use App\Events\Domain\Entities\Partner\Partner;
 use App\Events\Domain\Entities\Partner\PartnerCollection;
 use App\Events\Domain\Entities\Partner\PartnerId;
 use App\Events\Domain\Repositories\PartnerRepositoryInterface;
-use App\Events\Infra\Mappers\PartnerMapper;
+use App\Events\Infra\Mapper\PartnerMapper;
 use App\Models\PartnerModel;
 use Exception;
 
@@ -15,10 +14,10 @@ class PartnerRepository implements PartnerRepositoryInterface
 {
     public function save(Partner $entity): void
     {
-        $partnerArray = $entity->toArray();
-        $model = PartnerModel::find($partnerArray['id']) ?? PartnerMapper::toModel($entity);
+        $entityArray = $entity->toArray();
+        $model = PartnerModel::find($entityArray['id']) ?? PartnerMapper::toModel($entity);
 
-        $model->name = $partnerArray['name'];
+        $model->name = $entityArray['name'];
 
         $model->save();
     }
@@ -48,7 +47,9 @@ class PartnerRepository implements PartnerRepositoryInterface
 
     public function remove(Partner $entity): void
     {
-        $model = PartnerMapper::toModel($entity);
+        $entityArray = $entity->toArray();
+
+        $model = PartnerModel::find($entityArray['id']);
         $model->delete();
     }
 

@@ -68,8 +68,8 @@ class EventSpot extends AbstractEntity
         return [
             'spotId' => $this->spotId->getValue(),
             'location' => $this->location,
-            'isReserved' => $this->isReserved,
-            'isPublished' => $this->isPublished,
+            'is_reserved' => $this->isReserved,
+            'is_published' => $this->isPublished,
         ];
     }
 }

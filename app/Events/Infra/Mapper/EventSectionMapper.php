@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Infra\Mappers;
+namespace App\Events\Infra\Mapper;
 
 use App\Events\Domain\Entities\EventSection\EventSection;
 use App\Models\EventSectionModel;
@@ -15,11 +15,11 @@ class EventSectionMapper
             'id' => $sectionArray['id'] ?? null,
             'name' => $sectionArray['name'],
             'description' => $sectionArray['description'] ?? null,
-            'is_published' => $sectionArray['isPublished'],
-            'total_spots' => $sectionArray['totalSpots'],
-            'total_spots_reserved' => $sectionArray['totalSpotsReserved'],
+            'is_published' => $sectionArray['is_published'],
+            'total_spots' => $sectionArray['total_spots'],
+            'total_spots_reserved' => $sectionArray['total_spots_reserved'],
             'price' => $sectionArray['price'],
-            'event_id' => $sectionArray['eventId'],
+            'event_id' => $sectionArray['event_id'],
         ]);
     }
 
