@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Domain\Entities;
+namespace App\Events\Domain\Entities\Partner;
 
 use App\Common\Domain\ValueObjects\Uuid;
 

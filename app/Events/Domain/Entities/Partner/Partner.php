@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Events\Domain\Entities;
+namespace App\Events\Domain\Entities\Partner;
 
 use App\Common\Domain\AggregateRoot;
 use App\Common\Domain\ValueObjects\Name;
+use App\Events\Domain\Entities\Event\Event;
 use DateTimeImmutable;
 use DomainException;
 

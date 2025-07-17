@@ -3,7 +3,7 @@
 namespace Tests\Events\Domain\Entities;
 
 use App\Common\Domain\ValueObjects\Name;
-use App\Events\Domain\Entities\Partner;
+use App\Events\Domain\Entities\Partner\Partner;
 use PHPUnit\Framework\TestCase;
 
 class PartnerTest extends TestCase

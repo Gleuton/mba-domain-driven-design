@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Domain\Entities;
+namespace App\Events\Domain\Entities\Customer;
 
 use App\Common\Domain\AggregateRoot;
 use App\Common\Domain\ValueObjects\Cpf;

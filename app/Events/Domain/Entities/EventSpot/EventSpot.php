@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Domain\Entities;
+namespace App\Events\Domain\Entities\EventSpot;
 
 use App\Common\Domain\AbstractEntity;
 use DomainException;

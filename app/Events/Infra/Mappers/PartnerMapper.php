@@ -2,17 +2,18 @@
 
 namespace App\Events\Infra\Mappers;
 
-use App\Events\Domain\Entities\Partner;
-use App\Models\PartnerModel as PartnerModel;
+use App\Events\Domain\Entities\Partner\Partner;
+use App\Models\PartnerModel;
 
 class PartnerMapper
 {
     public static function toModel(Partner $partner): PartnerModel
     {
         $partnerArray = $partner->toArray();
+
         return new PartnerModel([
             'id' => $partnerArray['id'] ?? null,
-            'name' => (string) $partnerArray['name'],
+            'name' => $partnerArray['name'],
         ]);
     }
 

@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Events\Domain\Entities;
+namespace App\Events\Domain\Entities\EventSection;
 
 use App\Common\Domain\AbstractEntity;
 use App\Common\Domain\ValueObjects\Name;
+use App\Events\Domain\Entities\EventSpot\EventSpot;
+use App\Events\Domain\Entities\EventSpot\EventSpotCollection;
 use InvalidArgumentException;
 
 class EventSection extends AbstractEntity
@@ -19,19 +21,30 @@ class EventSection extends AbstractEntity
         private int $totalSpotsReserved,
     ) {
     }
-
+    /**
+     * @param array{
+     *     id?: string|null,
+     *     name: string,
+     *     description?: string|null,
+     *     price?: float,
+     *     totalSpots: int,
+     *     totalSpotsReserved?: int,
+     *     isPublished?: bool
+     * } $command
+     * @throws InvalidArgumentException
+     */
     public static function create(array $command): self
     {
-        $eventSpots = self::initializeEventSpots($command['total_spots']);
+        $eventSpots = self::initializeEventSpots($command['totalSpots']);
         return new self(
             new EventSectionId($command['id'] ?? null),
             new Name($command['name']),
             $command['description'] ?? null,
             (float) ($command['price'] ?? 0.0),
             $eventSpots,
-            $command['is_published'] ?? false,
-            (int) ($command['total_spots'] ?? 0),
-            (int) ($command['total_spots_reserved'] ?? 0)
+            $command['isPublished'] ?? false,
+            (int) ($command['totalSpots'] ?? 0),
+            (int) ($command['totalSpotsReserved'] ?? 0)
         );
     }
 

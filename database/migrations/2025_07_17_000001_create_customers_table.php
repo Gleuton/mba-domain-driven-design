@@ -8,8 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('partners', static function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('customers', static function (Blueprint $table) {
+            $table->unsignedBigInteger('id')->primary();
+            $table->string('cpf', 11)->unique();
             $table->string('name', 255);
             $table->timestamps();
         });
@@ -17,6 +18,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('partners');
+        Schema::dropIfExists('customers');
     }
 };

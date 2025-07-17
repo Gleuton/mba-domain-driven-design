@@ -2,7 +2,7 @@
 
 namespace Tests\Events\Domain\Entities;
 
-use App\Events\Domain\Entities\Customer;
+use App\Events\Domain\Entities\Customer\Customer;
 use DomainException;
 use Tests\TestCase;
 

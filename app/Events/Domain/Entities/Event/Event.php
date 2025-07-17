@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Events\Domain\Entities;
+namespace App\Events\Domain\Entities\Event;
 
 use App\Common\Domain\AggregateRoot;
 use App\Common\Domain\ValueObjects\Name;
+use App\Events\Domain\Entities\EventSection\EventSection;
+use App\Events\Domain\Entities\EventSection\EventSectionCollection;
+use App\Events\Domain\Entities\Partner\PartnerId;
 use DateTimeImmutable;
 use Exception;
 
@@ -24,6 +27,13 @@ class Event extends AggregateRoot
     }
 
     /**
+     * @param array{
+     *     id?: string|null,
+     *     name: string,
+     *     description?: string|null,
+     *     date: string,
+     *     partnerId?: string|null,
+     * } $command
      * @throws Exception
      */
     public static function create(array $command): self
@@ -33,7 +43,7 @@ class Event extends AggregateRoot
             new Name($command['name']),
             $command['description'] ?? null,
             new DateTimeImmutable($command['date']),
-            new PartnerId($command['partner_id'] ?? null),
+            new PartnerId($command['partnerId'] ?? null),
             new EventSectionCollection(),
         );
     }

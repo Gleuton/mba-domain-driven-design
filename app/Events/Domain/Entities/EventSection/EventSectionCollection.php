@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace App\Events\Domain\Entities;
+namespace App\Events\Domain\Entities\EventSection;
 
 use SplObjectStorage;
 use Traversable;

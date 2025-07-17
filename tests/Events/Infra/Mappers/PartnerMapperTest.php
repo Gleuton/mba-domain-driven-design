@@ -2,7 +2,7 @@
 
 namespace Tests\Events\Infra\Mappers;
 
-use App\Events\Domain\Entities\Partner;
+use App\Events\Domain\Entities\Partner\Partner;
 use App\Events\Infra\Mappers\PartnerMapper;
 use App\Models\PartnerModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;

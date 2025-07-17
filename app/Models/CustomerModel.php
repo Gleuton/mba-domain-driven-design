@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PartnerModel extends Model
+class CustomerModel extends Model
 {
-    protected $table = 'partners';
-    protected $fillable = ['id', 'name'];
+    protected $table = 'customers';
+    protected $fillable = ['id', 'cpf', 'name'];
     protected $keyType = 'string';
     public $incrementing = false;
 }

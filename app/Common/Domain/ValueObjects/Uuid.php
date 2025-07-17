@@ -34,4 +34,9 @@ class Uuid extends ValueObject
     {
         return $other instanceof self && $this->uuid === $other->uuid;
     }
+
+    public function __toString(): string
+    {
+        return $this->uuid;
+    }
 }

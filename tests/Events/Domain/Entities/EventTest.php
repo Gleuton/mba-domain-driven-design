@@ -2,8 +2,8 @@
 
 namespace Events\Domain\Entities;
 
-use App\Events\Domain\Entities\Event;
-use App\Events\Domain\Entities\EventSection;
+use App\Events\Domain\Entities\Event\Event;
+use App\Events\Domain\Entities\EventSection\EventSection;
 use PHPUnit\Framework\TestCase;
 
 class EventTest extends TestCase
