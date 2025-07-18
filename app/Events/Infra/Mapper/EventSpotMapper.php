@@ -12,11 +12,10 @@ class EventSpotMapper
         $spotArray = $spot->toArray();
 
         return new EventSpotModel([
-            'id' => $spotArray['id'] ?? null,
+            'id' => $spotArray['id'],
             'location' => $spotArray['location'] ?? null,
-            'is_reserved' => $spotArray['isReserved'],
-            'is_published' => $spotArray['isPublished'],
-            'event_section_id' => $spotArray['eventSectionId'],
+            'is_reserved' => $spotArray['is_reserved'],
+            'is_published' => $spotArray['is_published'],
         ]);
     }
 

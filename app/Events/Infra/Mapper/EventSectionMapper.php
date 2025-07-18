@@ -12,14 +12,13 @@ class EventSectionMapper
         $sectionArray = $section->toArray();
 
         return new EventSectionModel([
-            'id' => $sectionArray['id'] ?? null,
+            'id' => $sectionArray['id'],
             'name' => $sectionArray['name'],
             'description' => $sectionArray['description'] ?? null,
             'is_published' => $sectionArray['is_published'],
             'total_spots' => $sectionArray['total_spots'],
             'total_spots_reserved' => $sectionArray['total_spots_reserved'],
             'price' => $sectionArray['price'],
-            'event_id' => $sectionArray['event_id'],
         ]);
     }
 

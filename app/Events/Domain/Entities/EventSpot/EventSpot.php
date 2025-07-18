@@ -8,7 +8,7 @@ use DomainException;
 class EventSpot extends AbstractEntity
 {
     public function __construct(
-        private readonly EventSpotId $spotId,
+        private readonly EventSpotId $id,
         private ?string $location,
         private bool $isReserved,
         private bool $isPublished,
@@ -66,7 +66,7 @@ class EventSpot extends AbstractEntity
     public function serializableFields(): array
     {
         return [
-            'spotId' => $this->spotId->getValue(),
+            'id' => $this->id->getValue(),
             'location' => $this->location,
             'is_reserved' => $this->isReserved,
             'is_published' => $this->isPublished,

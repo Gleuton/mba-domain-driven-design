@@ -12,7 +12,7 @@ class CustomerMapper
         $entityArray= $entity->toArray();
 
         return new CustomerModel([
-            'id' => $entityArray['id'] ?? null,
+            'id' => $entityArray['id'],
             'name' => $entityArray['name'],
             'cpf' => $entityArray['cpf'],
         ]);

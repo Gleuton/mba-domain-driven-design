@@ -59,5 +59,14 @@ abstract class AbstractCollection implements \Countable, \IteratorAggregate
         return $this->storage;
     }
 
+    public function map(callable $callback): array
+    {
+        $result = [];
+        foreach ($this->storage as $item) {
+            $result[] = $callback($item);
+        }
+        return $result;
+    }
+
     abstract public function validate(AbstractEntity $entity): void;
 }

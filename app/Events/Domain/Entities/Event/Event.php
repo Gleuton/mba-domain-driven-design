@@ -48,7 +48,8 @@ class Event extends AggregateRoot
         );
     }
 
-    public function publishAll():void{
+    public function publishAll(): void
+    {
         $this->publish();
 
         /** @var EventSection $section */
@@ -57,7 +58,7 @@ class Event extends AggregateRoot
         }
     }
 
-    public function publish():void
+    public function publish(): void
     {
         $this->isPublished = true;
     }
@@ -94,7 +95,13 @@ class Event extends AggregateRoot
         $this->date = $date;
     }
 
-    protected function serializableFields(): array {
+    public function sections(): EventSectionCollection
+    {
+        return $this->eventSections;
+    }
+
+    protected function serializableFields(): array
+    {
         return [
             'id' => $this->id->getValue(),
             'name' => $this->name->getValue(),

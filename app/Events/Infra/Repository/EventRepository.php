@@ -7,6 +7,8 @@ use App\Events\Domain\Entities\Event\EventCollection;
 use App\Events\Domain\Entities\Event\EventId;
 use App\Events\Domain\Repositories\EventsRepositoryInterface;
 use App\Events\Infra\Mapper\EventMapper;
+use App\Events\Infra\Mapper\EventSectionMapper;
+use App\Events\Infra\Mapper\EventSpotMapper;
 use App\Models\EventModel;
 use Exception;
 
@@ -21,8 +23,13 @@ class EventRepository implements EventsRepositoryInterface
         $model->description = $entityArray['description'];
         $model->date = $entityArray['date'];
         $model->is_published = $entityArray['is_published'];
+        $model->partner_id = $entityArray['partner_id'];
+        $model->total_spots = $entityArray['total_spots'];
+        $model->total_spots_reserved = $entityArray['total_spots_reserved'];
 
         $model->save();
+
+        $this->saveSections($entity, $model);
     }
 
     public function findById(EventId $id): Event
@@ -54,5 +61,26 @@ class EventRepository implements EventsRepositoryInterface
 
         $model = EventModel::find($entityArray['id']);
         $model->delete();
+    }
+
+    private function saveSections(Event $entity, EventModel $model): void
+    {
+        $sections = $entity->sections()
+            ->map(function ($section) {
+                return EventSectionMapper::toModel($section);
+            });
+
+        $model->sections()->saveMany($sections);
+
+        foreach ($entity->sections() as $section) {
+            $sectionModel = EventSectionMapper::toModel($section);
+
+            $spots = $section->spots()
+                ->map(function ($spot) {
+                    return EventSpotMapper::toModel($spot);
+                });
+
+            $sectionModel->spots()->saveMany($spots);
+        }
     }
 }

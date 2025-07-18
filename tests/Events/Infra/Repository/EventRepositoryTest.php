@@ -5,8 +5,8 @@ namespace Events\Infra\Repository;
 use App\Common\Domain\ValueObjects\Name;
 use App\Events\Domain\Entities\Event\Event;
 use App\Events\Domain\Entities\Event\EventId;
+use App\Events\Domain\Entities\EventSection\EventSection;
 use App\Events\Domain\Entities\Partner\Partner;
-use App\Events\Domain\Entities\Partner\PartnerId;
 use App\Events\Infra\Repository\EventRepository;
 use App\Events\Infra\Repository\PartnerRepository;
 use DateTimeImmutable;
@@ -33,6 +33,17 @@ class EventRepositoryTest extends TestCase
             'partnerId' => $partner->toArray()['id'],
         ]);
 
+        $eventSection = EventSection::create([
+            'name' => 'Seção de Teste',
+            'description' => 'Descrição da Seção',
+            'price' => 100.0,
+            'totalSpots' => 50,
+            'totalSpotsReserved' => 0,
+            'isPublished' => false,
+        ]);
+
+        $event->addSection($eventSection);
+
         $repository = new EventRepository();
         $repository->save($event);
         $this->assertDatabaseHas('events', [
@@ -40,6 +51,27 @@ class EventRepositoryTest extends TestCase
             'name' => 'Evento de Teste',
             'description' => 'Descrição do Evento',
             'date' => '2023-10-01 10:00:00',
+        ]);
+
+        $this->assertDatabaseHas('partners', [
+            'id' => $partner->toArray()['id'],
+            'name' => 'Parceiro de Teste',
+        ]);
+
+        $this->assertDatabaseHas('event_sections', [
+            'id' => $eventSection->toArray()['id'],
+            'name' => 'Seção de Teste',
+            'description' => 'Descrição da Seção',
+            'price' => 100,
+            'total_spots' => 50,
+            'total_spots_reserved' => 0,
+            'is_published' => false,
+        ]);
+
+        $this->assertDatabaseCount('event_spots', 50);
+        $this->assertDatabaseHas('event_spots', [
+            'event_section_id' => $eventSection->toArray()['id'],
+            'is_reserved' => false,
         ]);
     }
 

@@ -12,7 +12,7 @@ class EventMapper
         $eventArray = $event->toArray();
 
         return new EventModel([
-            'id' => $eventArray['id'] ?? null,
+            'id' => $eventArray['id'],
             'name' => $eventArray['name'],
             'description' => $eventArray['description'] ?? null,
             'date' => $eventArray['date'],

@@ -114,6 +114,11 @@ class EventSection extends AbstractEntity
         $this->isPublished = false;
     }
 
+    public function spots(): EventSpotCollection
+    {
+        return $this->eventSpots;
+    }
+
     protected function serializableFields(): array
     {
         return [
