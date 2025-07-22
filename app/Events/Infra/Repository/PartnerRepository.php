@@ -2,18 +2,23 @@
 
 namespace App\Events\Infra\Repository;
 
+use App\Common\Domain\AbstractEntity;
+use App\Common\Domain\ValueObjects\Uuid;
+use App\Common\Infra\RepositoryInterface;
 use App\Events\Domain\Entities\Partner\Partner;
 use App\Events\Domain\Entities\Partner\PartnerCollection;
-use App\Events\Domain\Entities\Partner\PartnerId;
-use App\Events\Domain\Repositories\PartnerRepositoryInterface;
 use App\Events\Infra\Mapper\PartnerMapper;
 use App\Models\PartnerModel;
 use Exception;
 
-class PartnerRepository implements PartnerRepositoryInterface
+class PartnerRepository implements RepositoryInterface
 {
-    public function save(Partner $entity): void
+    public function save(AbstractEntity $entity): void
     {
+        if (!$entity instanceof Partner) {
+            throw new \RuntimeException("Invalid entity type");
+        }
+
         $entityArray = $entity->toArray();
         $model = PartnerModel::find($entityArray['id']) ?? PartnerMapper::toModel($entity);
 
@@ -22,7 +27,7 @@ class PartnerRepository implements PartnerRepositoryInterface
         $model->save();
     }
 
-    public function findById(PartnerId $id): Partner
+    public function findById(Uuid $id): Partner
     {
         $partnerModel = PartnerModel::find($id->getValue());
 
@@ -45,8 +50,11 @@ class PartnerRepository implements PartnerRepositoryInterface
         return $collection;
     }
 
-    public function remove(Partner $entity): void
+    public function remove(AbstractEntity $entity): void
     {
+        if (!$entity instanceof Partner) {
+            throw new \RuntimeException("Invalid entity type");
+        }
         $entityArray = $entity->toArray();
 
         $model = PartnerModel::find($entityArray['id']);

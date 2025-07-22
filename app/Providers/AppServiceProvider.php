@@ -2,8 +2,15 @@
 
 namespace App\Providers;
 
-use App\Events\Domain\Repositories\CustomerRepositoryInterface;
+use App\Common\Application\UnitOfWorkInterface;
+use App\Common\Infra\UnitOfWorkEloquent;
+use App\Events\Domain\Entities\Customer\Customer;
+use App\Events\Domain\Entities\Event\Event;
+use App\Events\Domain\Entities\Partner\Partner;
 use App\Events\Infra\Repository\CustomerRepository;
+use App\Events\Infra\Repository\EventRepository;
+use App\Events\Infra\Repository\PartnerRepository;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,17 +20,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(UnitOfWorkInterface::class, function ($app) {
+            $unitOfWork = new UnitOfWorkEloquent($app->make(DatabaseManager::class));
+
+            $unitOfWork->registerRepository(Customer::class, new CustomerRepository());
+            $unitOfWork->registerRepository(Event::class, new EventRepository());
+            $unitOfWork->registerRepository(Partner::class, new PartnerRepository());
+
+            return $unitOfWork;
+        });
     }
 
     /**
      * Bootstrap any application services.
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->app->bind(
-            CustomerRepositoryInterface::class,
-            CustomerRepository::class
-        );
     }
 }

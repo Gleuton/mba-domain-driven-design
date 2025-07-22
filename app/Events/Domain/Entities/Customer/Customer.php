@@ -10,8 +10,8 @@ use DomainException;
 class Customer extends AggregateRoot
 {
     private function __construct(
-        private readonly Cpf $cpf,
-        private readonly Name $name,
+        private Cpf $cpf,
+        private Name $name,
         private readonly CustomerId $id
     ) {
     }
@@ -31,6 +31,24 @@ class Customer extends AggregateRoot
             name: new Name($command['name']),
             id: new CustomerId($command['id'] ?? null)
         );
+    }
+
+    public function changeName(string $name): void
+    {
+        if (empty($name)) {
+            throw new DomainException('Nome é obrigatório');
+        }
+
+        $this->name = new Name($name);
+    }
+
+    public function changeCpf(string $cpf): void
+    {
+        if (empty($cpf)) {
+            throw new DomainException('CPF é obrigatório');
+        }
+
+        $this->cpf = new Cpf($cpf);
     }
 
     protected function serializableFields(): array

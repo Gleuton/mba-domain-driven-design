@@ -2,10 +2,11 @@
 
 namespace Tests\Events\Application;
 
+use App\Common\Infra\UnitOfWorkEloquent;
 use App\Events\Application\CustomerService;
 use App\Events\Domain\Entities\Customer\Customer;
 use App\Events\Domain\Entities\Customer\CustomerCollection;
-use App\Events\Domain\Repositories\CustomerRepositoryInterface;
+use App\Events\Infra\Repository\CustomerRepository;
 use PHPUnit\Framework\TestCase;
 
 class CustomerServiceTest extends TestCase
@@ -20,24 +21,31 @@ class CustomerServiceTest extends TestCase
             ->method('toArray')
             ->willReturn([$customer1, $customer2]);
 
-        $customerRepository = $this->createMock(CustomerRepositoryInterface::class);
+        $customerRepository = $this->createMock(CustomerRepository::class);
         $customerRepository->expects($this->once())
             ->method('findAll')
             ->willReturn($customerCollection);
 
-        $customerService = new CustomerService($customerRepository);
+        $unitOfWork = $this->createMock(UnitOfWorkEloquent::class);
+
+
+        $customerService = new CustomerService($customerRepository, $unitOfWork, );
+
         $customers = $customerService->list();
         $this->assertCount(2, $customers);
     }
 
     public function testRegisterCustomer(): void {
-        $customerRepository = $this->createMock(CustomerRepositoryInterface::class);
-        $customerRepository->expects($this->once())
-            ->method('save')
+        $customerRepository = $this->createMock(CustomerRepository::class);
+
+        $unitOfWork = $this->createMock(UnitOfWorkEloquent::class);
+        $unitOfWork->expects($this->once())
+            ->method('register')
             ->with($this->isInstanceOf(Customer::class));
 
-        $customerService = new CustomerService($customerRepository);
-        $customerService->register(['name' => 'John Doe', 'cpf' => '843.746.580-09']);
+        $customerService = new CustomerService($customerRepository, $unitOfWork);
 
+
+        $customerService->register(['name' => 'John Doe', 'cpf' => '843.746.580-09']);
     }
 }

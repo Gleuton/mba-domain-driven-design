@@ -6,5 +6,4 @@ use App\Common\Domain\ValueObjects\Uuid;
 
 class CustomerId extends Uuid
 {
-
 }
