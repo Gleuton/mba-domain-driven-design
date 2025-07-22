@@ -5,8 +5,6 @@ namespace App\Events\Application;
 use App\Common\Infra\UnitOfWorkEloquent;
 use App\Events\Domain\Entities\Customer\Customer;
 use App\Events\Infra\Repository\CustomerRepository;
-use Exception;
-use RuntimeException;
 
 readonly class CustomerService
 {
