@@ -25,12 +25,18 @@ class EventMapper
 
     public static function toDomain(EventModel $model): Event
     {
-        return Event::create([
+        $event = Event::create([
             'id' => $model->id,
             'name' => $model->name,
             'description' => $model->description,
             'date' => $model->date,
             'partnerId' => $model->partner_id,
         ]);
+
+        foreach ($model->sections() as $sectionModel) {
+            $event->addSection(EventSectionMapper::toDomain($sectionModel));
+        }
+
+        return $event;
     }
 }
