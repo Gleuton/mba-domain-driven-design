@@ -18,7 +18,7 @@ class EventSectionCollection extends AbstractCollection
         }
     }
 
-    public function getById(EventSectionId $sectionId): EventSection
+    public function sectionById(EventSectionId $sectionId): EventSection
     {
         $section = $this->find(
             fn(EventSection $section) => $section->equals($sectionId)

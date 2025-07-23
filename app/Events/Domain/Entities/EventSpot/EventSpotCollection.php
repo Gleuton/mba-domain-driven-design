@@ -16,4 +16,17 @@ class EventSpotCollection extends AbstractCollection
             throw new \InvalidArgumentException('The entity must be an instance of EventSpot');
         }
     }
+
+    public function spotById(EventSpotId $eventSpotId): EventSpot
+    {
+        $spot = $this->find(
+            fn(EventSpot $spot) => $spot->equals($eventSpotId)
+        );
+
+        if (!$spot instanceof EventSpot) {
+            throw new \InvalidArgumentException("Spot not found for ID: {$eventSpotId}");
+        }
+
+        return $spot;
+    }
 }

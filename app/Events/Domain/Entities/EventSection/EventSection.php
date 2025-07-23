@@ -64,16 +64,12 @@ class EventSection extends AbstractEntity
     {
         return $this->totalSpotsReserved;
     }
-
-    public function reserveSpot(): void
+    public function markSpotAsReserved(EventSpotId $eventSpotId): void
     {
-        if ($this->totalSpotsReserved >= $this->totalSpots) {
-            throw new \RuntimeException('No more spots available to reserve.');
-        }
-
+        $spot = $this->spots()->spotById($eventSpotId);
+        $spot->reserve();
         $this->totalSpotsReserved++;
     }
-
     public function equals(EventSectionId $param): bool
     {
         return $this->id->equals($param);

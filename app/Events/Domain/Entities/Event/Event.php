@@ -124,7 +124,14 @@ class Event extends AggregateRoot
 
     public function sectionById(EventSectionId $sectionId): EventSection
     {
-        return $this->eventSections->getById($sectionId);
+        return $this->eventSections->sectionById($sectionId);
+    }
+
+    public function markSpotAsReserved(EventSectionId $sectionId, EventSpotId $eventSpotId): void
+    {
+        $section = $this->sectionById($sectionId);
+        $section->markSpotAsReserved($eventSpotId);
+        $this->totalSpotsReserved++;
     }
 
     protected function serializableFields(): array

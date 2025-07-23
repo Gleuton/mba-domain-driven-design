@@ -78,8 +78,11 @@ readonly class OrderService
             'amount' => $section->price(),
         ]);
 
+        $event->markSpotAsReserved($sectionId, $eventSpotId);
+
         $this->unitOfWork->register($reservation);
         $this->unitOfWork->register($order);
+        $this->unitOfWork->register($event);
         $this->unitOfWork->commit();
 
         return $reservation->toArray();
