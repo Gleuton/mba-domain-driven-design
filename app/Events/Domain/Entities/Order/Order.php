@@ -3,35 +3,45 @@
 namespace App\Events\Domain\Entities\Order;
 
 use App\Common\Domain\AggregateRoot;
-use App\Events\Domain\Entities\EventSection\EventSectionId;
+use App\Events\Domain\Entities\Customer\CustomerId;
+use App\Events\Domain\Entities\EventSpot\EventSpotId;
 
 class Order extends AggregateRoot
 {
     private function __construct(
         private ?OrderId $id,
-        private string $customerId,
+        private CustomerId $customerId,
         private float $amount,
-        private EventSectionId $eventSectionId,
+        private EventSpotId $eventSpotId,
     )
     {
     }
 
-    public static function create(?array $data = []): Order {
+    /**
+     * @param array{
+     *     orderId?: string,
+     *     customerId: string,
+     *     amount: float,
+     *     eventSpotId: string
+     * } $data
+     * @return Order
+     */
+    public static function create(array $data = []): Order {
         return new self(
             new OrderId($data['orderId'] ?? null),
-            $data['customerId'] ?? '',
+            new CustomerId($data['customerId']),
             $data['amount'] ?? 0.0,
-            new EventSectionId($data['eventSectionId'] ?? null)
+            new EventSpotId($data['eventSpotId'])
         );
     }
 
     public function serializableFields(): array
     {
         return [
-            'orderId' => $this->id?->getValue(),
-            'customerId' => $this->customerId,
+            'order_id' => $this->id?->getValue(),
+            'customer_id' => $this->customerId,
             'amount' => $this->amount,
-            'eventSectionId' => $this->eventSectionId->getValue(),
+            'event_spot_id' => $this->eventSpotId->getValue(),
         ];
     }
 }

@@ -39,8 +39,8 @@ class SpotReservation extends AggregateRoot
     protected function serializableFields(): array
     {
         return [
-            'eventSpotId' => $this->eventSpotId->getValue(),
-            'customerId' => $this->customerId,
+            'event_spot_id' => $this->eventSpotId->getValue(),
+            'customer_id' => $this->customerId,
             'reservedAt' => $this->reservedAt->format(DateTimeInterface::ATOM),
         ];
     }
