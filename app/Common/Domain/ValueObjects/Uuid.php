@@ -32,7 +32,7 @@ class Uuid extends ValueObject
 
     public function equals(ValueObject $other): bool
     {
-        return $other instanceof self && $this->uuid === $other->uuid;
+        return $other instanceof self && $this->uuid === $other->getValue();
     }
 
     public function __toString(): string

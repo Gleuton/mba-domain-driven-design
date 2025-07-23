@@ -7,10 +7,13 @@ use App\Common\Domain\ValueObjects\Uuid;
 use App\Common\Infra\RepositoryInterface;
 use App\Events\Domain\Entities\Event\Event;
 use App\Events\Domain\Entities\Event\EventCollection;
+use App\Events\Domain\Entities\EventSection\EventSection;
+use App\Events\Domain\Entities\EventSection\EventSectionId;
 use App\Events\Infra\Mapper\EventMapper;
 use App\Events\Infra\Mapper\EventSectionMapper;
 use App\Events\Infra\Mapper\EventSpotMapper;
 use App\Models\EventModel;
+use App\Models\EventSectionModel;
 use Exception;
 use RuntimeException;
 
@@ -73,6 +76,15 @@ class EventRepository implements RepositoryInterface
 
         $model = EventModel::find($entityArray['id']);
         $model->delete();
+    }
+
+    public function sectionById(EventSectionId $id): EventSection
+    {
+        $model = EventSectionModel::find($id->getValue());
+        if (!$model) {
+            throw new RuntimeException("Event section not found");
+        }
+        return EventSectionMapper::toDomain($model);
     }
 
     private function saveSections(Event $entity, EventModel $model): void

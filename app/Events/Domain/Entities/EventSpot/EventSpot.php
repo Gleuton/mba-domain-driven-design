@@ -72,4 +72,9 @@ class EventSpot extends AbstractEntity
             'is_published' => $this->isPublished,
         ];
     }
+
+    public function equals(EventSpotId $param): bool
+    {
+        return $this->id->equals($param);
+    }
 }

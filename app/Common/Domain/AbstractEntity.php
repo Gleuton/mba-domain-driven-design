@@ -2,6 +2,8 @@
 
 namespace App\Common\Domain;
 
+use App\Common\Domain\ValueObjects\Uuid;
+use App\Events\Domain\Entities\EventSpot\EventSpotId;
 use JsonException;
 use ReflectionObject;
 

@@ -9,12 +9,12 @@ use App\Events\Domain\Entities\EventSpot\EventSpotId;
 class Order extends AggregateRoot
 {
     private function __construct(
-        private ?OrderId $id,
+        private OrderId $id,
         private CustomerId $customerId,
         private float $amount,
         private EventSpotId $eventSpotId,
-    )
-    {
+        private OrderStatus $status,
+    ) {
     }
 
     /**
@@ -26,22 +26,25 @@ class Order extends AggregateRoot
      * } $data
      * @return Order
      */
-    public static function create(array $data = []): Order {
+    public static function create(array $data = []): Order
+    {
         return new self(
             new OrderId($data['orderId'] ?? null),
             new CustomerId($data['customerId']),
             $data['amount'] ?? 0.0,
-            new EventSpotId($data['eventSpotId'])
+            new EventSpotId($data['eventSpotId']),
+            OrderStatus::PENDING
         );
     }
 
     public function serializableFields(): array
     {
         return [
-            'order_id' => $this->id?->getValue(),
+            'order_id' => $this->id->getValue(),
             'customer_id' => $this->customerId,
             'amount' => $this->amount,
             'event_spot_id' => $this->eventSpotId->getValue(),
+            'status' => $this->status->value,
         ];
     }
 }

@@ -68,6 +68,11 @@ class EventSection extends AbstractEntity
         $this->totalSpotsReserved++;
     }
 
+    public function equals(EventSectionId $param): bool
+    {
+        return $this->id->equals($param);
+    }
+
     /**
      * @param $totalSpots
      * @return EventSpotCollection

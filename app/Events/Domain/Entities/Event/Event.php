@@ -4,11 +4,15 @@ namespace App\Events\Domain\Entities\Event;
 
 use App\Common\Domain\AggregateRoot;
 use App\Common\Domain\ValueObjects\Name;
+use App\Common\Domain\ValueObjects\Uuid;
 use App\Events\Domain\Entities\EventSection\EventSection;
 use App\Events\Domain\Entities\EventSection\EventSectionCollection;
+use App\Events\Domain\Entities\EventSection\EventSectionId;
+use App\Events\Domain\Entities\EventSpot\EventSpotId;
 use App\Events\Domain\Entities\Partner\PartnerId;
 use DateTimeImmutable;
 use Exception;
+use InvalidArgumentException;
 
 class Event extends AggregateRoot
 {
@@ -57,6 +61,7 @@ class Event extends AggregateRoot
             $section->publishAll();
         }
     }
+
 
     public function publish(): void
     {

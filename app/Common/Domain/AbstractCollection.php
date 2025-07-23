@@ -2,6 +2,7 @@
 
 namespace App\Common\Domain;
 
+use App\Common\Domain\ValueObjects\Uuid;
 use SplObjectStorage;
 use Traversable;
 
@@ -24,10 +25,15 @@ abstract class AbstractCollection implements \Countable, \IteratorAggregate
         return $this;
     }
 
-    public function remove(AbstractEntity $customer): self
+    public function remove(AbstractEntity $entity): self
     {
-        $this->storage->detach($customer);
+        $this->storage->detach($entity);
         return $this;
+    }
+
+    public function find(callable $callback): ?AbstractEntity
+    {
+        return array_find((array) $this->storage, $callback);
     }
 
     public function contains(AbstractEntity $customer): bool
