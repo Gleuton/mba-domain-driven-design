@@ -61,7 +61,23 @@ class Event extends AggregateRoot
             $section->publishAll();
         }
     }
+    public function allowReserveSpots(EventSectionId $sectionId, EventSpotId $spotId): bool
+    {
+        if (!$this->isPublished) {
+            return false;
+        }
+        /**
+         * @var EventSection $section
+         */
+        $section = $this->eventSections->find(
+            fn(EventSection $section) => $section->equals($sectionId)
+        );
+        if (!$section) {
+            throw new InvalidArgumentException('Event section not found');
+        }
 
+        return $section->allowReserveSpot($spotId);
+    }
 
     public function publish(): void
     {

@@ -41,12 +41,25 @@ class OrderRepository implements RepositoryInterface
 
     public function findAll(): OrderCollection
     {
+        $models = OrderModel::all();
+        $collection = new OrderCollection();
 
+        foreach ($models as $model) {
+            $collection->add(OrderMapper::toDomain($model));
+        }
+
+        return $collection;
     }
 
     public function remove(AbstractEntity $entity): void
     {
+        if (!$entity instanceof Order) {
+            throw new \RuntimeException("Invalid entity type");
+        }
+        $entityArray = $entity->toArray();
 
+        $model = OrderModel::find($entityArray['id']);
+        $model->delete();
     }
 
 

@@ -6,6 +6,7 @@ use App\Common\Domain\AbstractEntity;
 use App\Common\Domain\ValueObjects\Name;
 use App\Events\Domain\Entities\EventSpot\EventSpot;
 use App\Events\Domain\Entities\EventSpot\EventSpotCollection;
+use App\Events\Domain\Entities\EventSpot\EventSpotId;
 use InvalidArgumentException;
 
 class EventSection extends AbstractEntity
@@ -21,6 +22,7 @@ class EventSection extends AbstractEntity
         private int $totalSpotsReserved,
     ) {
     }
+
     /**
      * @param array{
      *     id?: string|null,
@@ -73,6 +75,31 @@ class EventSection extends AbstractEntity
         return $this->id->equals($param);
     }
 
+    public function allowReserveSpot(EventSpotId $spotId): bool
+    {
+        if (!$this->isPublished) {
+            return false;
+        }
+
+        /** @var EventSpot $spot */
+        $spot = $this->eventSpots->find(
+            fn(EventSpot $entity) => $entity->equals($spotId)
+        );
+        if (!$spot) {
+            throw new InvalidArgumentException('Event spot not found');
+        }
+
+        if ($spot->isReserved()) {
+            return false;
+        }
+
+        if (!$spot->isPublished()) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @param $totalSpots
      * @return EventSpotCollection
@@ -111,6 +138,7 @@ class EventSection extends AbstractEntity
         }
         $this->isPublished = true;
     }
+
     public function unpublish(): void
     {
         if (!$this->isPublished) {

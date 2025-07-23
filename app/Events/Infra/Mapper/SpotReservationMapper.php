@@ -22,7 +22,7 @@ class SpotReservationMapper
         return SpotReservation::create([
             'customerId' => $model->customer_id,
             'eventSpotId' => $model->spot_id,
-            'reservation_date' => $model->reservation_date,
+            'reservedAt' => $model->reservation_date,
         ]);
     }
 }

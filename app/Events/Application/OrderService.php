@@ -2,14 +2,10 @@
 
 namespace App\Events\Application;
 
-use App\Common\Domain\AbstractEntity;
 use App\Common\Infra\UnitOfWorkEloquent;
 use App\Events\Domain\Entities\Customer\CustomerId;
-use App\Events\Domain\Entities\Event\Event;
 use App\Events\Domain\Entities\Event\EventId;
-use App\Events\Domain\Entities\EventSection\EventSection;
 use App\Events\Domain\Entities\EventSection\EventSectionId;
-use App\Events\Domain\Entities\EventSpot\EventSpot;
 use App\Events\Domain\Entities\EventSpot\EventSpotId;
 use App\Events\Domain\Entities\Order\Order;
 use App\Events\Infra\Repository\CustomerRepository;
@@ -18,7 +14,7 @@ use App\Events\Infra\Repository\OrderRepository;
 use InvalidArgumentException;
 use Throwable;
 
-class OrderService
+readonly class OrderService
 {
     public function __construct(
         private OrderRepository $orderRepository,
@@ -48,10 +44,14 @@ class OrderService
      */
     public function create(array $input): array
     {
+        $sectionId = new EventSectionId($input['sectionId']);
+        $eventSpotId = new EventSpotId($input['eventSpotId']);
         $customer = $this->customerRepository->findById(new CustomerId($input['customerId']));
         $event = $this->eventRepository->findById(new EventId($input['eventId']));
-        $section = $this->getSection($event, $input['sectionId']);
-        $spot = $this->getSpot($section, $input['eventSpotId']);
+
+        if (!$event->allowReserveSpots($sectionId, $eventSpotId)){
+            throw new InvalidArgumentException('Spot reservation is not allowed for this event or section');
+        }
 
         $order = Order::create([
             'customerId' => $input['customerId'],
@@ -63,36 +63,5 @@ class OrderService
         $this->unitOfWork->commit();
 
         return $order->toArray();
-    }
-
-
-    public function getSpot(EventSection $section, EventSpotId $eventSpotId): EventSpot
-    {
-        /**
-         * @var EventSpot $spot
-         */
-        $spot = $section->spots()->find(
-            static fn(EventSpot $entity) => $entity->equals(new EventSpotId($eventSpotId))
-        );
-        if (!$spot) {
-            throw new InvalidArgumentException('Event spot not found');
-        }
-
-        return $spot;
-    }
-
-    private function getSection(Event $event, EventSectionId $sectionId): EventSection
-    {
-        /**
-         * @var EventSection $section
-         */
-        $section = $event->sections()->find(
-            static fn(EventSection $entity) => $entity->equals(new EventSectionId($sectionId))
-        );
-        
-        if (!$section) {
-            throw new InvalidArgumentException('Section not found');
-        }
-        return $section;
     }
 }

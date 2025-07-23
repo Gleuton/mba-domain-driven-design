@@ -25,6 +25,7 @@ class SpotReservation extends AggregateRoot
      *     customerId: string,
      *     reservedAt: string
      * } $data
+     *
      * @throws DateMalformedStringException
      */
     public static function create(?array $data = []): self
@@ -32,7 +33,7 @@ class SpotReservation extends AggregateRoot
         return new self(
             new EventSpotId($data['eventSpotId']),
             new CustomerId($data['customerId']),
-            new DateTimeImmutable($data['reservedAt'])
+            new DateTimeImmutable($data['reservedAt'] ?? 'now')
         );
     }
 

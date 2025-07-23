@@ -77,4 +77,14 @@ class EventSpot extends AbstractEntity
     {
         return $this->id->equals($param);
     }
+
+    public function isReserved(): bool
+    {
+        return $this->isReserved;
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->isPublished;
+    }
 }
