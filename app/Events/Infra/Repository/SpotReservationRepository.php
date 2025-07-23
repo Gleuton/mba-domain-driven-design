@@ -25,12 +25,12 @@ class SpotReservationRepository implements RepositoryInterface
         $model->save();
     }
 
-    public function findById(Uuid $id): SpotReservation
+    public function findById(Uuid $id): ?SpotReservation
     {
         $model = SpotReservationModel::find($id->getValue());
 
         if (!$model) {
-            throw new Exception("Model not found");
+            return null;
         }
 
         return SpotReservationMapper::toDomain($model);

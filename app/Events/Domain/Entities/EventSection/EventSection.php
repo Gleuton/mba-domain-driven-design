@@ -50,6 +50,10 @@ class EventSection extends AbstractEntity
         );
     }
 
+    public function price(): float
+    {
+        return $this->price;
+    }
 
     public function totalSpots(): int
     {

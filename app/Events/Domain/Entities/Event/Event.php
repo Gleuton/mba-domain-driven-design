@@ -2,6 +2,7 @@
 
 namespace App\Events\Domain\Entities\Event;
 
+use App\Common\Domain\AbstractEntity;
 use App\Common\Domain\AggregateRoot;
 use App\Common\Domain\ValueObjects\Name;
 use App\Common\Domain\ValueObjects\Uuid;
@@ -119,6 +120,11 @@ class Event extends AggregateRoot
     public function sections(): EventSectionCollection
     {
         return $this->eventSections;
+    }
+
+    public function sectionById(EventSectionId $sectionId): EventSection
+    {
+        return $this->eventSections->getById($sectionId);
     }
 
     protected function serializableFields(): array
