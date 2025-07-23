@@ -2,10 +2,8 @@
 
 namespace App\Events\Domain\Entities\Event;
 
-use App\Common\Domain\AbstractEntity;
 use App\Common\Domain\AggregateRoot;
 use App\Common\Domain\ValueObjects\Name;
-use App\Common\Domain\ValueObjects\Uuid;
 use App\Events\Domain\Entities\EventSection\EventSection;
 use App\Events\Domain\Entities\EventSection\EventSectionCollection;
 use App\Events\Domain\Entities\EventSection\EventSectionId;
