@@ -95,7 +95,7 @@ class UnitOfWorkEloquent implements UnitOfWorkInterface
 
     public function hasPendingChanges(): bool
     {
-        return !empty($this->newEntities) || !empty($this->dirtyEntities) || !empty($this->removedEntities);
+        return !empty($this->newEntities) || !empty($this->removedEntities);
     }
 
     public function flush(): void
