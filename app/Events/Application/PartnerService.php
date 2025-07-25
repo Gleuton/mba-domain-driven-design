@@ -4,6 +4,7 @@ namespace App\Events\Application;
 
 use App\Common\Infra\UnitOfWorkEloquent;
 use App\Events\Domain\Entities\Partner\Partner;
+use App\Events\Domain\Entities\Partner\PartnerCollection;
 use App\Events\Infra\Repository\PartnerRepository;
 
 readonly class PartnerService
@@ -15,11 +16,10 @@ readonly class PartnerService
     {
     }
 
-    public function list(): array
+    public function list(): PartnerCollection
     {
         return $this->eventRepository
-            ->findAll()
-            ->toArray();
+            ->findAll();
     }
 
     public function register(array $input): array

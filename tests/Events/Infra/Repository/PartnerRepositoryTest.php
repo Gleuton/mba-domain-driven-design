@@ -13,7 +13,6 @@ use Tests\TestCase;
 class PartnerRepositoryTest extends TestCase
 {
     use RefreshDatabase;
-
     public function testSavePartner(): void
     {
         $partner = Partner::create([
