@@ -2,9 +2,7 @@
 
 namespace Funcional\Partner;
 
-use Database\Factories\PartnerFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class PartnerCreateTest extends TestCase
