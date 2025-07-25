@@ -10,7 +10,6 @@ use Tests\TestCase;
 class PartnerCreateTest extends TestCase
 {
     use RefreshDatabase;
-    use WithoutMiddleware;
 
     public function testCreatePartners(): void
     {
@@ -29,10 +28,24 @@ class PartnerCreateTest extends TestCase
         ]);
     }
 
-    public function testCreatePartnerWithInvalidData(): void{
+    public function testCreatePartnerWithNameNull(): void{
         $response = $this->postJson('/api/partner', []);
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['name']);
+        $response->assertJsonFragment([
+            'name' => ['O nome do parceiro é obrigatório.']
+        ]);
+    }
+
+    public function testCreatePartnerWithNameLessThanThreeCharacters(): void{
+        $response = $this->postJson('/api/partner', [
+            'name' => 'ab',
+        ]);
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['name']);
+        $response->assertJsonFragment([
+            'name' => ['O nome do parceiro deve ter pelo menos 3 caracteres.']
+        ]);
     }
 
 }

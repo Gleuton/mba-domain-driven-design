@@ -14,7 +14,7 @@ class StorePartnerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|min:3',
         ];
     }
 
@@ -22,6 +22,8 @@ class StorePartnerRequest extends FormRequest
     {
         return [
             'name.required' => 'O nome do parceiro é obrigatório.',
+            'name.min' => 'O nome do parceiro deve ter pelo menos 3 caracteres.',
+            'name.max' => 'O nome do parceiro não pode ter mais de 255 caracteres',
         ];
     }
 }
