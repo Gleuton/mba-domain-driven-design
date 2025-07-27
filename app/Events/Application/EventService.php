@@ -63,4 +63,15 @@ readonly class EventService
 
         return $event->sections()->toArray();
     }
+
+    public function publishAll(string $id): Event
+    {
+        $event = $this->eventRepository->findById(new EventId($id));
+
+        $event->publishAll();
+        $this->unitOfWork->register($event);
+        $this->unitOfWork->commit();
+
+        return $event;
+    }
 }

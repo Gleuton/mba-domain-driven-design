@@ -26,4 +26,10 @@ class EventController extends Controller
         $partner = $this->event->create($payload);
         return response()->json($partner->toArray(), 201);
     }
+
+    public function publishAll(string $id): JsonResponse
+    {
+        $this->event->publishAll($id);
+        return response()->json(['message' => 'All events published successfully.']);
+    }
 }

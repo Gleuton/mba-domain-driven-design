@@ -9,3 +9,4 @@ Route::post('/partners', [PartnerController::class, 'create'])->name('partner.cr
 
 Route::get('/events', [EventController::class, 'list'])->name('event.list');
 Route::post('/events', [EventController::class, 'create'])->name('event.create');
+Route::put('/events/{id}/publish-all', [EventController::class, 'publishAll'])->name('event.publish.all');

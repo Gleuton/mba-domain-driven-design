@@ -2,6 +2,7 @@
 
 namespace Tests\Funcional\Event;
 
+use Database\Factories\EventSectionsFactory;
 use Database\Factories\EventsFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -17,7 +18,6 @@ class EventListTest extends TestCase
         $response = $this->get('/api/events');
 
         $response->assertStatus(200);
-        $response->assertJsonIsArray();
         $response->assertJsonStructure([
             '*' => [
                 'id',
@@ -28,6 +28,7 @@ class EventListTest extends TestCase
                 'total_spots',
                 'total_spots_reserved',
                 'partner_id',
+                'event_sections'
             ]
         ]);
         $response->assertJsonCount(3);

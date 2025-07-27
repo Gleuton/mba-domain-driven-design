@@ -14,6 +14,7 @@ use App\Events\Infra\Mapper\EventSectionMapper;
 use App\Events\Infra\Mapper\EventSpotMapper;
 use App\Models\EventModel;
 use App\Models\EventSectionModel;
+use App\Models\EventSpotModel;
 use Exception;
 use RuntimeException;
 
@@ -89,19 +90,41 @@ class EventRepository implements RepositoryInterface
 
     private function saveSections(Event $entity, EventModel $model): void
     {
+        //* @var EventSectionModel[] $sections */
         $sections = $entity->sections()
             ->map(function ($section) {
-                return EventSectionMapper::toModel($section);
+                $entityArray = $section->toArray();
+                $model = EventSectionModel::find($entityArray['id']) ?? EventSectionMapper::toModel($section);
+                $model->fill([
+                    'id' => $entityArray['id'] ?? null,
+                    'name' => $entityArray['name'] ?? null,
+                    'description' => $entityArray['description'] ?? null,
+                    'is_published' => $entityArray['is_published'] ?? false,
+                    'event_id' => $entityArray['event_id'] ?? null,
+                    'total_spots' => $entityArray['total_spots'] ?? 0,
+                    'total_spots_reserved' => $entityArray['total_spots_reserved'] ?? 0,
+                ]);
+                return $model;
             });
 
         $model->sections()->saveMany($sections);
 
         foreach ($entity->sections() as $section) {
-            $sectionModel = EventSectionMapper::toModel($section);
+            $entityArray = $section->toArray();
+            $sectionModel = EventSectionModel::find($entityArray['id']) ?? EventSectionMapper::toModel($section);
 
             $spots = $section->spots()
                 ->map(function ($spot) {
-                    return EventSpotMapper::toModel($spot);
+                    $entityArray = $spot->toArray();
+                    $model = EventSpotModel::find($entityArray['id']) ?? EventSpotMapper::toModel($spot);
+                    $model->fill([
+                        'id' => $entityArray['id'] ?? null,
+                        'location' => $entityArray['location'] ?? null,
+                        'is_reserved' => $entityArray['is_reserved'] ?? false,
+                        'is_published' => $entityArray['is_published'] ?? false,
+                        'event_section_id' => $entityArray['event_section_id'] ?? null,
+                    ]);
+                    return $model;
                 });
 
             $sectionModel->spots()->saveMany($spots);
