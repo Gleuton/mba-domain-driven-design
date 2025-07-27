@@ -13,8 +13,6 @@ class PartnerListTest extends TestCase
     public function testListPartners(): void
     {
         PartnerFactory::new()->count(3)->create();
-        $testPartner = PartnerFactory::new()->create()->name;
-
 
         $response = $this->get('/api/partners');
 

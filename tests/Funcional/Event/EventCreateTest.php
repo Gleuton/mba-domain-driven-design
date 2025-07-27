@@ -21,7 +21,7 @@ class EventCreateTest extends TestCase
     public function testCreateEvent(): void
     {
         $response = $this->postJson(
-            '/api/event',
+            '/api/events',
             [
                 'name' => 'Test Event',
                 'description' => 'This is a test event.',
@@ -52,7 +52,7 @@ class EventCreateTest extends TestCase
             $payload['partner_id'] = $this->partner->id;
         }
 
-        $response = $this->postJson('/api/event', $payload);
+        $response = $this->postJson('/api/events', $payload);
 
         $response->assertStatus($expectedStatus);
 

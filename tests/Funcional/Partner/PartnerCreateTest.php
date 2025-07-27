@@ -12,7 +12,7 @@ class PartnerCreateTest extends TestCase
     public function testCreatePartners(): void
     {
         $response = $this->postJson(
-            '/api/partner',
+            '/api/partners',
             [
                 'name' => 'Test Partner',
             ]);
@@ -27,7 +27,7 @@ class PartnerCreateTest extends TestCase
     }
 
     public function testCreatePartnerWithNameNull(): void{
-        $response = $this->postJson('/api/partner', []);
+        $response = $this->postJson('/api/partners', []);
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['name']);
         $response->assertJsonFragment([
@@ -36,7 +36,7 @@ class PartnerCreateTest extends TestCase
     }
 
     public function testCreatePartnerWithNameLessThanThreeCharacters(): void{
-        $response = $this->postJson('/api/partner', [
+        $response = $this->postJson('/api/partners', [
             'name' => 'ab',
         ]);
         $response->assertStatus(422);
