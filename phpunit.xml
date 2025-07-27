@@ -9,8 +9,14 @@
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
-        <testsuite name="Feature">
-            <directory>tests/Feature</directory>
+        <testsuite name="Funcional">
+            <directory>tests/Funcional</directory>
+        </testsuite>
+        <testsuite name="Events">
+            <directory>tests/Events</directory>
+        </testsuite>
+        <testsuite name="Common">
+            <directory>tests/Common</directory>
         </testsuite>
     </testsuites>
     <source>
