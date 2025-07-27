@@ -2,8 +2,10 @@
 
 namespace App\Events\Application;
 
+use App\Common\Application\UnitOfWorkInterface;
 use App\Common\Domain\ValueObjects\Name;
-use App\Common\Infra\UnitOfWorkEloquent;
+use App\Events\Domain\Entities\Event\Event;
+use App\Events\Domain\Entities\Event\EventCollection;
 use App\Events\Domain\Entities\Event\EventId;
 use App\Events\Infra\Repository\EventRepository;
 use App\Events\Infra\Repository\PartnerRepository;
@@ -15,15 +17,14 @@ readonly class EventService
     public function __construct(
         private EventRepository $eventRepository,
         private PartnerRepository $partnerRepository,
-        private UnitOfWorkEloquent $unitOfWork
+        private UnitOfWorkInterface $unitOfWork
     ) {
     }
 
-    public function list(): array
+    public function list(): EventCollection
     {
         return $this->eventRepository
-            ->findAll()
-            ->toArray();
+            ->findAll();
     }
 
     /**
@@ -32,14 +33,17 @@ readonly class EventService
      *    name: string,
      *    description?: string|null,
      *    date: string,
-     *    partnerId: string,
+     *    partner_id: string,
      * } $input
-     * @return array
+     * @return Event
      * @throws Throwable
      */
-    public function create(array $input): array
+    public function create(array $input): Event
     {
-        $partner = $this->partnerRepository->findById($input['partnerId']);
+        $partner = $this->partnerRepository->findById(new EventId($input['partner_id']));
+        if (!$partner) {
+            throw new \InvalidArgumentException('Partner not found');
+        }
 
         $event = $partner->eventInit(
             new Name($input['name']),
@@ -50,7 +54,7 @@ readonly class EventService
         $this->unitOfWork->register($event);
         $this->unitOfWork->commit();
 
-        return $event->toArray();
+        return $event;
     }
 
     public function findSections(string $eventId): array
