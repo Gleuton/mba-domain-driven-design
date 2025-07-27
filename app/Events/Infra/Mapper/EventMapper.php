@@ -33,7 +33,7 @@ class EventMapper
             'partnerId' => $model->partner_id,
         ]);
 
-        foreach ($model->sections() as $sectionModel) {
+        foreach ($model->sections()->getResults() as $sectionModel) {
             $event->addSection(EventSectionMapper::toDomain($sectionModel));
         }
 
