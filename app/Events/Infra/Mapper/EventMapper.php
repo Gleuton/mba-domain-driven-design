@@ -30,6 +30,7 @@ class EventMapper
             'name' => $model->name,
             'description' => $model->description,
             'date' => $model->date,
+            'isPublished' => $model->is_published,
             'partnerId' => $model->partner_id,
         ]);
 

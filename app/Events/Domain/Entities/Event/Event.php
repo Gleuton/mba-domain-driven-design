@@ -11,11 +11,9 @@ use App\Events\Domain\Entities\EventSpot\EventSpotId;
 use App\Events\Domain\Entities\Partner\PartnerId;
 use DateTimeImmutable;
 use Exception;
-use InvalidArgumentException;
 
 class Event extends AggregateRoot
 {
-    private bool $isPublished = false;
     private int $totalSpots = 0;
     private int $totalSpotsReserved = 0;
 
@@ -25,6 +23,7 @@ class Event extends AggregateRoot
         private ?string $description,
         private DateTimeImmutable $date,
         private readonly PartnerId $partnerId,
+        private bool $isPublished,
         private readonly EventSectionCollection $eventSections
     ) {
     }
@@ -36,6 +35,7 @@ class Event extends AggregateRoot
      *     description?: string|null,
      *     date: string,
      *     partnerId?: string|null,
+     *     isPublished?: bool,
      * } $command
      * @throws Exception
      */
@@ -47,6 +47,7 @@ class Event extends AggregateRoot
             $command['description'] ?? null,
             new DateTimeImmutable($command['date']),
             new PartnerId($command['partnerId'] ?? null),
+            $command['isPublished'] ?? false,
             new EventSectionCollection(),
         );
     }
@@ -60,22 +61,14 @@ class Event extends AggregateRoot
             $section->publishAll();
         }
     }
+
     public function allowReserveSpots(EventSectionId $sectionId, EventSpotId $spotId): bool
     {
         if (!$this->isPublished) {
             return false;
         }
-        /**
-         * @var EventSection $section
-         */
-        $section = $this->eventSections->find(
-            fn(EventSection $section) => $section->equals($sectionId)
-        );
-        if (!$section) {
-            throw new InvalidArgumentException('Event section not found');
-        }
 
-        return $section->allowReserveSpot($spotId);
+        return $this->eventSections->sectionById($sectionId)->allowReserveSpot($spotId);
     }
 
     public function publish(): void
@@ -130,6 +123,15 @@ class Event extends AggregateRoot
         $section = $this->sectionById($sectionId);
         $section->markSpotAsReserved($eventSpotId);
         $this->totalSpotsReserved++;
+    }
+
+    public function initializeEventSpots(): void
+    {
+        $eventoSections = $this->eventSections->toArray();
+        /** @var EventSection $section */
+        foreach ($this->eventSections as $section) {
+            $section->initializeEventSpots();
+        }
     }
 
     protected function serializableFields(): array

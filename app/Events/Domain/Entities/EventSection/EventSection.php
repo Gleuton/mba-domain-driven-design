@@ -18,7 +18,7 @@ class EventSection extends AbstractEntity
         private float $price,
         private readonly EventSpotCollection $eventSpots,
         private bool $isPublished,
-        private readonly int $totalSpots,
+        private int $totalSpots,
         private int $totalSpotsReserved,
     ) {
     }
@@ -37,7 +37,7 @@ class EventSection extends AbstractEntity
      */
     public static function create(array $command): self
     {
-        $eventSpots = self::initializeEventSpots($command['totalSpots']);
+        $eventSpots = new EventSpotCollection();
         return new self(
             new EventSectionId($command['id'] ?? null),
             new Name($command['name']),
@@ -64,12 +64,14 @@ class EventSection extends AbstractEntity
     {
         return $this->totalSpotsReserved;
     }
+
     public function markSpotAsReserved(EventSpotId $eventSpotId): void
     {
         $spot = $this->spots()->spotById($eventSpotId);
         $spot->reserve();
         $this->totalSpotsReserved++;
     }
+
     public function equals(EventSectionId $param): bool
     {
         return $this->id->equals($param);
@@ -81,13 +83,7 @@ class EventSection extends AbstractEntity
             return false;
         }
 
-        /** @var EventSpot $spot */
-        $spot = $this->eventSpots->find(
-            fn(EventSpot $entity) => $entity->equals($spotId)
-        );
-        if (!$spot) {
-            throw new InvalidArgumentException('Event spot not found');
-        }
+        $spot = $this->eventSpots->spotById($spotId);
 
         if ($spot->isReserved()) {
             return false;
@@ -100,17 +96,20 @@ class EventSection extends AbstractEntity
         return true;
     }
 
-    /**
-     * @param $totalSpots
-     * @return EventSpotCollection
-     */
-    private static function initializeEventSpots($totalSpots): EventSpotCollection
+    public function addSpot(EventSpot $eventSpot): void
     {
-        $eventSpots = new EventSpotCollection();
-        for ($i = 0; $i < ($totalSpots ?? 0); $i++) {
-            $eventSpots->add(EventSpot::create());
+        if ($this->eventSpots->contains($eventSpot)) {
+            throw new InvalidArgumentException('Spot already exists in the section.');
         }
-        return $eventSpots;
+        $this->eventSpots->add($eventSpot);
+        $this->totalSpots++;
+    }
+
+    public function initializeEventSpots(): void
+    {
+        for ($i = 0; $i < ($this->totalSpots ?? 0); $i++) {
+            $this->eventSpots->add(EventSpot::create());
+        }
     }
 
     public function changePrice(float $price): void

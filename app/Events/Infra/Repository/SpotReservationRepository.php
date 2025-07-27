@@ -20,20 +20,25 @@ class SpotReservationRepository implements RepositoryInterface
             throw new RuntimeException("Invalid entity type");
         }
         $entityArray = $entity->toArray();
-        $model = SpotReservationModel::find($entityArray['id']) ?? SpotReservationMapper::toModel($entity);
+        $model = SpotReservationModel::find($entityArray['event_spot_id']) ?? SpotReservationMapper::toModel($entity);
+
+        $model->fill([
+            'spot_id' => $entityArray['event_spot_id'] ?? null,
+            'customer_id' => $entityArray['customer_id'] ?? null,
+            'reservation_date' => $entityArray['reservation_date'] ?? null,
+        ]);
 
         $model->save();
     }
 
     public function findById(Uuid $id): ?SpotReservation
     {
-        $model = SpotReservationModel::find($id->getValue());
-
-        if (!$model) {
+        $models = SpotReservationModel::where('spot_id', $id->getValue())->get();
+        if ($models->isEmpty()) {
             return null;
         }
 
-        return SpotReservationMapper::toDomain($model);
+        return SpotReservationMapper::toDomain($models->first());
     }
 
     public function findAll(): SpotReservationCollection
@@ -55,7 +60,7 @@ class SpotReservationRepository implements RepositoryInterface
         }
         $entityArray = $entity->toArray();
 
-        $model = SpotReservationModel::find($entityArray['id']);
+        $model = SpotReservationModel::find($entityArray['event_spot_id']);
         $model->delete();
     }
 }

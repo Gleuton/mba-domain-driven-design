@@ -10,6 +10,8 @@ class SpotReservationModel extends Model
     protected $table = 'spot_reservations';
     protected $fillable = ['spot_id', 'reservation_date', 'customer_id'];
     protected $keyType = 'string';
+
+    protected $primaryKey = 'spot_id';
     public $incrementing = false;
 
     public function spot(): BelongsTo

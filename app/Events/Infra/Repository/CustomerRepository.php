@@ -35,7 +35,7 @@ class CustomerRepository implements RepositoryInterface
         $partnerModel = CustomerModel::find($id->getValue());
 
         if (!$partnerModel) {
-            throw new Exception("Customer not found");
+            throw new RuntimeException("Customer not found");
         }
 
         return CustomerMapper::toDomain($partnerModel);
@@ -70,7 +70,7 @@ class CustomerRepository implements RepositoryInterface
         $model = CustomerModel::where('cpf', $cpf->getValue())->first();
 
         if (!$model) {
-            throw new Exception("Customer not found");
+            throw new RuntimeException("Customer not found");
         }
 
         return CustomerMapper::toDomain($model);

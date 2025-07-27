@@ -2,7 +2,7 @@
 
 namespace App\Events\Application;
 
-use App\Common\Infra\UnitOfWorkEloquent;
+use App\Common\Application\UnitOfWorkInterface;
 use App\Events\Domain\Entities\Customer\CustomerId;
 use App\Events\Domain\Entities\Event\EventId;
 use App\Events\Domain\Entities\EventSection\EventSectionId;
@@ -14,7 +14,6 @@ use App\Events\Infra\Repository\CustomerRepository;
 use App\Events\Infra\Repository\EventRepository;
 use App\Events\Infra\Repository\OrderRepository;
 use App\Events\Infra\Repository\SpotReservationRepository;
-use DateTimeImmutable;
 use InvalidArgumentException;
 use Throwable;
 
@@ -25,7 +24,7 @@ readonly class OrderService
         private CustomerRepository $customerRepository,
         private EventRepository $eventRepository,
         private SpotReservationRepository $spotReservationRepository,
-        private UnitOfWorkEloquent $unitOfWork
+        private UnitOfWorkInterface $unitOfWork
     ) {
     }
 
@@ -37,20 +36,20 @@ readonly class OrderService
 
     /**
      * @param array{
-     *    eventId :string,
-     *    customerId: string,
-     *    sectionId: string,
-     *    eventSpotId: string,
+     *    event_id :string,
+     *    customer_id: string,
+     *    event_section_id: string,
+     *    event_spot_id: string,
      * } $input
-     * @return array
+     * @return SpotReservation
      * @throws Throwable
      */
-    public function create(array $input): array
+    public function create(array $input): SpotReservation
     {
-        $sectionId = new EventSectionId($input['sectionId']);
-        $eventSpotId = new EventSpotId($input['eventSpotId']);
-        $customerId = new CustomerId($input['customerId']);
-        $eventId = new EventId($input['eventId']);
+        $sectionId = new EventSectionId($input['event_section_id']);
+        $eventSpotId = new EventSpotId($input['event_spot_id']);
+        $customerId = new CustomerId($input['customer_id']);
+        $eventId = new EventId($input['event_id']);
 
         $this->customerRepository->findById($customerId);
         $event = $this->eventRepository->findById($eventId);
@@ -58,6 +57,7 @@ readonly class OrderService
         if (!$event->allowReserveSpots($sectionId, $eventSpotId)) {
             throw new InvalidArgumentException('Spot reservation is not allowed for this event or section');
         }
+
         $spotReservation = $this->spotReservationRepository->findById($eventSpotId);
 
         if ($spotReservation) {
@@ -67,7 +67,7 @@ readonly class OrderService
         $reservation = SpotReservation::create([
             'customerId' => $customerId->getValue(),
             'eventSpotId' => $eventSpotId->getValue(),
-            'reservedAt' => new DateTimeImmutable(),
+            'reservedAt' => null
         ]);
 
         $section = $event->sectionById($sectionId);
@@ -85,6 +85,6 @@ readonly class OrderService
         $this->unitOfWork->register($event);
         $this->unitOfWork->commit();
 
-        return $reservation->toArray();
+        return $reservation;
     }
 }

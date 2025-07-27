@@ -24,7 +24,7 @@ class EventSectionMapper
 
     public static function toDomain(EventSectionModel $model): EventSection
     {
-        return EventSection::create([
+        $event = EventSection::create([
             'id' => $model->id,
             'name' => $model->name,
             'description' => $model->description,
@@ -33,5 +33,11 @@ class EventSectionMapper
             'totalSpotsReserved' => $model->total_spots_reserved,
             'price' => $model->price,
         ]);
+
+        foreach ($model->spots()->getResults() as $spotModel) {
+            $event->addSpot(EventSpotMapper::toDomain($spotModel));
+        }
+
+        return $event;
     }
 }

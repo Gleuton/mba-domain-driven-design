@@ -24,6 +24,6 @@ class OrderController extends Controller
         $payload = $request->validated();
 
         $order = $this->orderService->create($payload);
-        return response()->json($order, 201);
+        return response()->json($order->toArray(), 201);
     }
 }

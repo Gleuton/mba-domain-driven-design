@@ -41,9 +41,6 @@ readonly class EventService
     public function create(array $input): Event
     {
         $partner = $this->partnerRepository->findById(new EventId($input['partner_id']));
-        if (!$partner) {
-            throw new \InvalidArgumentException('Partner not found');
-        }
 
         $event = $partner->eventInit(
             new Name($input['name']),
@@ -67,6 +64,7 @@ readonly class EventService
     public function publishAll(string $id): Event
     {
         $event = $this->eventRepository->findById(new EventId($id));
+        $event->initializeEventSpots();
 
         $event->publishAll();
         $this->unitOfWork->register($event);

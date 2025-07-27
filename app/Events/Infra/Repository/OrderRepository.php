@@ -7,6 +7,7 @@ use App\Common\Domain\ValueObjects\Uuid;
 use App\Common\Infra\RepositoryInterface;
 use App\Events\Domain\Entities\Order\Order;
 use App\Events\Domain\Entities\Order\OrderCollection;
+use App\Events\Domain\Entities\Order\OrderStatus;
 use App\Events\Infra\Mapper\OrderMapper;
 use App\Models\OrderModel;
 use Exception;
@@ -21,9 +22,13 @@ class OrderRepository implements RepositoryInterface
         }
         $entityArray = $entity->toArray();
         $model = OrderModel::find($entityArray['id']) ?? OrderMapper::toModel($entity);
-
-        $model->name = $entityArray['name'];
-        $model->cpf = $entityArray['cpf'];
+        $model->fill([
+            'id' => $entityArray['id'] ?? null,
+            'amount' => $entityArray['amount'] ?? 0,
+            'status' => $entityArray['status'] ?? OrderStatus::PENDING,
+            'customer_id' => $entityArray['customer_id'] ?? null,
+            'event_spot_id' => $entityArray['event_spot_id'] ?? null,
+        ]);
 
         $model->save();
     }

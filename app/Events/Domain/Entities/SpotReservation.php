@@ -12,9 +12,9 @@ use DateTimeInterface;
 class SpotReservation extends AggregateRoot
 {
     private function __construct(
-        private EventSpotId $eventSpotId,
-        private CustomerId $customerId,
-        private DateTimeImmutable $reservedAt,
+        private readonly EventSpotId $eventSpotId,
+        private readonly CustomerId $customerId,
+        private readonly DateTimeImmutable $reservedAt,
     )
     {
     }
@@ -23,7 +23,7 @@ class SpotReservation extends AggregateRoot
      * @param ?array{
      *     eventSpotId: string,
      *     customerId: string,
-     *     reservedAt: string
+     *     reservedAt: ?string
      * } $data
      *
      * @throws DateMalformedStringException
@@ -42,7 +42,7 @@ class SpotReservation extends AggregateRoot
         return [
             'event_spot_id' => $this->eventSpotId->getValue(),
             'customer_id' => $this->customerId,
-            'reservedAt' => $this->reservedAt->format(DateTimeInterface::ATOM),
+            'reservation_date' => $this->reservedAt->format(DateTimeInterface::ATOM),
         ];
     }
 }

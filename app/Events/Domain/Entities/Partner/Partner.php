@@ -34,12 +34,14 @@ class Partner extends AggregateRoot
 
     public function eventInit(Name $name, ?string $description, DateTimeImmutable $date): Event
     {
-        return Event::create([
+        $event = Event::create([
             'name' => $name->getValue(),
             'description' => $description,
             'date' => $date->format('Y-m-d H:i:s'),
             'partnerId' => $this->id->getValue(),
         ]);
+        $event->initializeEventSpots();
+        return $event;
     }
 
     public function changeName(Name $name): void

@@ -12,7 +12,7 @@ class SpotReservationMapper
         $entityArray = $entity->toArray();
         return new SpotReservationModel([
             'customer_id' => $entityArray['customer_id'],
-            'spot_id' => $entityArray['spot_id'],
+            'spot_id' => $entityArray['event_spot_id'],
             'reservation_date' => $entityArray['reservation_date'],
         ]);
     }

@@ -43,6 +43,7 @@ class EventRepositoryTest extends TestCase
         ]);
 
         $event->addSection($eventSection);
+        $event->initializeEventSpots();
 
         $repository = new EventRepository();
         $repository->save($event);
