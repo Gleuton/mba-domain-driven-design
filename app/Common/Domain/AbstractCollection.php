@@ -2,7 +2,6 @@
 
 namespace App\Common\Domain;
 
-use App\Common\Domain\ValueObjects\Uuid;
 use SplObjectStorage;
 use Traversable;
 

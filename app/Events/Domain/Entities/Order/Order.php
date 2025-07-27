@@ -40,7 +40,7 @@ class Order extends AggregateRoot
     public function serializableFields(): array
     {
         return [
-            'order_id' => $this->id->getValue(),
+            'id' => $this->id->getValue(),
             'customer_id' => $this->customerId,
             'amount' => $this->amount,
             'event_spot_id' => $this->eventSpotId->getValue(),

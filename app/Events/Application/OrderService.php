@@ -8,6 +8,7 @@ use App\Events\Domain\Entities\Event\EventId;
 use App\Events\Domain\Entities\EventSection\EventSectionId;
 use App\Events\Domain\Entities\EventSpot\EventSpotId;
 use App\Events\Domain\Entities\Order\Order;
+use App\Events\Domain\Entities\Order\OrderCollection;
 use App\Events\Domain\Entities\SpotReservation;
 use App\Events\Infra\Repository\CustomerRepository;
 use App\Events\Infra\Repository\EventRepository;
@@ -28,11 +29,10 @@ readonly class OrderService
     ) {
     }
 
-    public function list(): array
+    public function list(): OrderCollection
     {
         return $this->orderRepository
-            ->findAll()
-            ->toArray();
+            ->findAll();
     }
 
     /**
