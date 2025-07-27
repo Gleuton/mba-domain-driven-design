@@ -14,5 +14,5 @@ Route::put('/events/{id}/publish-all', [EventController::class, 'publishAll'])->
 
 
 Route::get('/orders', [OrderController::class, 'list'])->name('order.list');
-//Route::post('/orders', [OrderController::class, 'create'])->name('order.create');
+Route::post('/orders', [OrderController::class, 'create'])->name('order.create');
 //Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
